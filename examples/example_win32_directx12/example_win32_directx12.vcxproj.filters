@@ -24,6 +24,24 @@
     <ClInclude Include="..\..\backends\imgui_impl_win32.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="d3d12_context.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="window_base.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="window_demo.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="window_plots.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="window_settings.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="window_manager.h">
+      <Filter>sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\imgui.cpp">
@@ -42,6 +60,24 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\backends\imgui_impl_win32.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="d3d12_context.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="window_base.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="window_demo.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="window_plots.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="window_settings.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="window_manager.cpp">
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\imgui_tables.cpp">
