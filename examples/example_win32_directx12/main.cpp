@@ -485,6 +485,11 @@ WindowContext* CreateWindowContext(const wchar_t* title, int x, int y, int width
     style.ScaleAllSizes(scale);
     style.FontScaleDpi = scale;
 
+    // Use vector font (built-in ProggyClean TTF) at larger size.
+    // Setting FontSizeBase >= 15 triggers AddFontDefaultVector() automatically.
+    style.FontSizeBase = 24.0f;
+    io.Fonts->AddFontDefaultVector();
+
     ImGui_ImplWin32_Init(wc->Hwnd);
 
     ImGui_ImplDX12_InitInfo init_info = {};
