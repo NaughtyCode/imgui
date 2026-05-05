@@ -161,6 +161,7 @@
     <ClInclude Include="windows\window_demo.h" />
     <ClInclude Include="windows\window_plots.h" />
     <ClInclude Include="windows\window_settings.h" />
+    <ClInclude Include="windows\window_main.h" />
     <ClInclude Include="framework\window_manager.h" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,7 @@
     <ClCompile Include="windows\window_demo.cpp" />
     <ClCompile Include="windows\window_plots.cpp" />
     <ClCompile Include="windows\window_settings.cpp" />
+    <ClCompile Include="windows\window_main.cpp" />
     <ClCompile Include="framework\window_manager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

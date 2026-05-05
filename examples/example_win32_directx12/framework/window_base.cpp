@@ -1,14 +1,15 @@
 #include "window_base.h"
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx12.h"
+#include <windowsx.h>
 #include <cassert>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 bool WindowBase::s_classRegistered = false;
 
-WindowBase::WindowBase(D3D12Context& d3d, const wchar_t* title, int x, int y, int w, int h, float scale)
-    : m_d3d(d3d), m_title(title), m_x(x), m_y(y), m_width(w), m_height(h), m_scale(scale)
+WindowBase::WindowBase(D3D12Context& d3d, const wchar_t* title, int x, int y, int w, int h, float scale, bool bordered)
+    : m_d3d(d3d), m_title(title), m_x(x), m_y(y), m_width(w), m_height(h), m_scale(scale), m_bordered(bordered)
 {
 }
 
@@ -62,10 +63,17 @@ bool WindowBase::CreateSwapChain()
         s_classRegistered = true;
     }
 
-    m_hwnd = ::CreateWindowW(CLASS_NAME, m_title.c_str(), WS_OVERLAPPEDWINDOW,
+    DWORD style = m_bordered
+        ? WS_OVERLAPPEDWINDOW
+        : WS_POPUP | WS_THICKFRAME | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX;
+    DWORD exStyle = m_bordered ? 0 : WS_EX_APPWINDOW;
+
+    m_hwnd = ::CreateWindowExW(exStyle, CLASS_NAME, m_title.c_str(), style,
         m_x, m_y, m_width, m_height, nullptr, nullptr, GetModuleHandle(nullptr), this);
     if (!m_hwnd)
         return false;
+
+    m_titleBarHeight = 30.0f * m_scale;
 
     DXGI_SWAP_CHAIN_DESC1 sd = {};
     sd.BufferCount = D3D12Context::NUM_BACK_BUFFERS;
@@ -283,6 +291,20 @@ LRESULT WINAPI WindowBase::StaticWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPA
 
     WindowBase* self = reinterpret_cast<WindowBase*>(::GetWindowLongPtrW(hWnd, GWLP_USERDATA));
 
+    // For borderless windows, make the title bar area draggable
+    if (self && !self->m_bordered && msg == WM_NCHITTEST)
+    {
+        LRESULT hit = ::DefWindowProcW(hWnd, msg, wParam, lParam);
+        if (hit == HTCLIENT)
+        {
+            POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+            ::ScreenToClient(hWnd, &pt);
+            if (pt.y >= 0 && pt.y <= self->m_titleBarHeight)
+                return HTCAPTION;
+        }
+        return hit;
+    }
+
     if (self && self->m_imguiCtx)
     {
         ImGui::SetCurrentContext(self->m_imguiCtx);
@@ -315,4 +337,67 @@ LRESULT WindowBase::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
         return 0;
     }
     return ::DefWindowProcW(m_hwnd, msg, wParam, lParam);
+}
+
+// ---------- Custom Title Bar ----------
+
+void WindowBase::DrawCustomTitleBar(const char* title)
+{
+    float h = m_titleBarHeight;
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8, 4));
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 2));
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(6, 2));
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
+
+    ImGui::SetNextWindowPos(ImVec2(0, 0));
+    ImGui::BeginChild("##TitleBar", ImVec2(ImGui::GetIO().DisplaySize.x, h),
+        ImGuiChildFlags_FrameStyle);
+
+    ImGui::SetCursorPosY((h - ImGui::GetTextLineHeight()) * 0.5f);
+    ImGui::Text("%s", title);
+
+    float btnW = h;
+    float btnX = ImGui::GetIO().DisplaySize.x - (btnW + 4) * 3;
+
+    ImGui::SetCursorPos(ImVec2(btnX, 0));
+
+    if (ImGui::Button("_", ImVec2(btnW, h)))
+        Minimize();
+    ImGui::SameLine(0, 4);
+
+    if (ImGui::Button("[]", ImVec2(btnW, h)))
+        Maximize();
+    ImGui::SameLine(0, 4);
+
+    ImGui::PushStyleColor(ImGuiCol_Button,        ImVec4(0.75f, 0.20f, 0.20f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered,  ImVec4(0.90f, 0.25f, 0.25f, 1.0f));
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive,   ImVec4(0.60f, 0.15f, 0.15f, 1.0f));
+    if (ImGui::Button("X", ImVec2(btnW, h)))
+        m_closed = true;
+    ImGui::PopStyleColor(3);
+
+    ImGui::EndChild();
+    ImGui::PopStyleColor(2);
+    ImGui::PopStyleVar(3);
+}
+
+void WindowBase::Minimize()
+{
+    ::ShowWindow(m_hwnd, SW_MINIMIZE);
+}
+
+void WindowBase::Maximize()
+{
+    WINDOWPLACEMENT wp = { sizeof(wp) };
+    ::GetWindowPlacement(m_hwnd, &wp);
+    if (wp.showCmd == SW_MAXIMIZE)
+        ::ShowWindow(m_hwnd, SW_RESTORE);
+    else
+        ::ShowWindow(m_hwnd, SW_MAXIMIZE);
+}
+
+void WindowBase::Restore()
+{
+    ::ShowWindow(m_hwnd, SW_RESTORE);
 }

@@ -2,6 +2,8 @@
 
 void WindowDemo::Render()
 {
+    DrawCustomTitleBar("Window 1 - Demo");
+
     static bool showDemoWindow = true;
     static bool showAnotherWindow = true;
     static float f = 0.0f;

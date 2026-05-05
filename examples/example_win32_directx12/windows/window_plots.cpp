@@ -3,6 +3,8 @@
 
 void WindowPlots::Render()
 {
+    DrawCustomTitleBar("Window 2 - Plots");
+
     static bool showAnotherWindow = true;
     static float values[90] = {};
     static int values_offset = 0;

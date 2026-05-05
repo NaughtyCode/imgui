@@ -9,7 +9,7 @@
 class WindowBase
 {
 public:
-    WindowBase(D3D12Context& d3d, const wchar_t* title, int x, int y, int w, int h, float scale);
+    WindowBase(D3D12Context& d3d, const wchar_t* title, int x, int y, int w, int h, float scale, bool bordered = true);
     virtual ~WindowBase();
 
     WindowBase(const WindowBase&) = delete;
@@ -55,10 +55,18 @@ public:
 protected:
     virtual LRESULT HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam);
 
+    // Custom title bar for borderless windows
+    void DrawCustomTitleBar(const char* title);
+    void Minimize();
+    void Maximize();
+    void Restore();
+
     D3D12Context& m_d3d;
     HWND          m_hwnd = nullptr;
     ImVec4        m_clearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
     float         m_scale = 1.0f;
+    bool          m_bordered = true;
+    float         m_titleBarHeight = 32.0f;
 
 private:
     static LRESULT WINAPI StaticWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);

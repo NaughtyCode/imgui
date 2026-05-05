@@ -39,6 +39,9 @@
     <ClInclude Include="windows\window_settings.h">
       <Filter>sources</Filter>
     </ClInclude>
+    <ClInclude Include="windows\window_main.h">
+      <Filter>sources</Filter>
+    </ClInclude>
     <ClInclude Include="framework\window_manager.h">
       <Filter>sources</Filter>
     </ClInclude>
@@ -75,6 +78,9 @@
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="windows\window_settings.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="windows\window_main.cpp">
       <Filter>sources</Filter>
     </ClCompile>
     <ClCompile Include="framework\window_manager.cpp">

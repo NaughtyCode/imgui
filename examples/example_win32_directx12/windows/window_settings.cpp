@@ -2,6 +2,8 @@
 
 void WindowSettings::Render()
 {
+    DrawCustomTitleBar("Window 3 - Settings");
+
     static bool vsync = true;
     static bool fullscreen = false;
     static int aa_samples = 4;
