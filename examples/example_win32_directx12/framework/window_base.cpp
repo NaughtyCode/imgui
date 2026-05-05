@@ -272,6 +272,15 @@ HRESULT WindowBase::Present()
 
 LRESULT WINAPI WindowBase::StaticWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    // WM_NCCREATE is the first message sent to a window. Set GWLP_USERDATA here
+    // so that all subsequent messages (including WM_CREATE) can find the WindowBase.
+    if (msg == WM_NCCREATE)
+    {
+        CREATESTRUCTW* cs = reinterpret_cast<CREATESTRUCTW*>(lParam);
+        ::SetWindowLongPtrW(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(cs->lpCreateParams));
+        return ::DefWindowProcW(hWnd, msg, wParam, lParam);
+    }
+
     WindowBase* self = reinterpret_cast<WindowBase*>(::GetWindowLongPtrW(hWnd, GWLP_USERDATA));
 
     if (self && self->m_imguiCtx)
@@ -291,12 +300,6 @@ LRESULT WindowBase::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
 {
     switch (msg)
     {
-    case WM_CREATE:
-    {
-        CREATESTRUCTW* cs = reinterpret_cast<CREATESTRUCTW*>(lParam);
-        ::SetWindowLongPtrW(m_hwnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(cs->lpCreateParams));
-        return 0;
-    }
     case WM_SIZE:
         if (m_swapChain && wParam != SIZE_MINIMIZED)
             ResizeSwapChain(static_cast<UINT>(LOWORD(lParam)), static_cast<UINT>(HIWORD(lParam)));
