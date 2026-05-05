@@ -32,3 +32,10 @@ void WindowMain::Render()
 
     ImGui::End();
 }
+
+LRESULT WindowMain::HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (msg == WM_CLOSE)
+        ::PostQuitMessage(0);
+    return WindowBase::HandleMessage(msg, wParam, lParam);
+}

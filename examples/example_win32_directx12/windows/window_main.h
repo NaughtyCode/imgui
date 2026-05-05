@@ -8,4 +8,5 @@ public:
 
 protected:
     void Render() override;
+    LRESULT HandleMessage(UINT msg, WPARAM wParam, LPARAM lParam) override;
 };
