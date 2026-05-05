@@ -1,7 +1,7 @@
 #pragma once
-#include "window_base.h"
+#include "../framework/window_base.h"
 
-class WindowPlots final : public WindowBase
+class WindowSettings final : public WindowBase
 {
 public:
     using WindowBase::WindowBase;

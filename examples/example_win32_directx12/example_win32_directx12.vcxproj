@@ -156,12 +156,12 @@
     <ClInclude Include="..\..\imgui_internal.h" />
     <ClInclude Include="..\..\backends\imgui_impl_dx12.h" />
     <ClInclude Include="..\..\backends\imgui_impl_win32.h" />
-    <ClInclude Include="d3d12_context.h" />
-    <ClInclude Include="window_base.h" />
-    <ClInclude Include="window_demo.h" />
-    <ClInclude Include="window_plots.h" />
-    <ClInclude Include="window_settings.h" />
-    <ClInclude Include="window_manager.h" />
+    <ClInclude Include="framework\d3d12_context.h" />
+    <ClInclude Include="framework\window_base.h" />
+    <ClInclude Include="windows\window_demo.h" />
+    <ClInclude Include="windows\window_plots.h" />
+    <ClInclude Include="windows\window_settings.h" />
+    <ClInclude Include="framework\window_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\imgui.cpp" />
@@ -171,12 +171,12 @@
     <ClCompile Include="..\..\imgui_widgets.cpp" />
     <ClCompile Include="..\..\backends\imgui_impl_dx12.cpp" />
     <ClCompile Include="..\..\backends\imgui_impl_win32.cpp" />
-    <ClCompile Include="d3d12_context.cpp" />
-    <ClCompile Include="window_base.cpp" />
-    <ClCompile Include="window_demo.cpp" />
-    <ClCompile Include="window_plots.cpp" />
-    <ClCompile Include="window_settings.cpp" />
-    <ClCompile Include="window_manager.cpp" />
+    <ClCompile Include="framework\d3d12_context.cpp" />
+    <ClCompile Include="framework\window_base.cpp" />
+    <ClCompile Include="windows\window_demo.cpp" />
+    <ClCompile Include="windows\window_plots.cpp" />
+    <ClCompile Include="windows\window_settings.cpp" />
+    <ClCompile Include="framework\window_manager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>

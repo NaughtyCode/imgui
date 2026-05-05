@@ -1,5 +1,5 @@
 #pragma once
-#include "window_base.h"
+#include "../framework/window_base.h"
 
 class WindowDemo final : public WindowBase
 {

@@ -4,10 +4,10 @@
 
 #include "imgui.h"
 #include "imgui_impl_win32.h"
-#include "window_manager.h"
-#include "window_demo.h"
-#include "window_plots.h"
-#include "window_settings.h"
+#include "framework/window_manager.h"
+#include "windows/window_demo.h"
+#include "windows/window_plots.h"
+#include "windows/window_settings.h"
 
 // Required by ImGui_ImplWin32_WndProcHandler (declared in window_base.cpp as well)
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
